@@ -1,22 +1,27 @@
+#Importando bibliotecas
+import os
 from flask import Flask, jsonify, request
 
-app = Flask(__name__)
+#Instânciando o Flask
+application = Flask(__name__)
 
-#lista para receber os comentários
+#Lista para receber os comentários
 comentarios = []
 
-#consultando todos os comentários
-@app.route('/consultar', methods=['GET'])
-def home():
-    return jsonify(comentarios), 200
-
-#inserindo um novo comentário
-@app.route('/comentar', methods=['POST'])
+#Inserindo um novo comentário
+@application.route('/comentar', methods=['POST'])
 def comentar():
     inserir = request.get_json()
-    comentarios.append(inserir) #salvando o dado em memória
+    comentarios.append(inserir) #Salvando o dado em memória
     return jsonify(inserir), 201
 
-#habilitando o modo debug
-if __name__ == '__main__':
-    app.run(debug=True)
+#Consultando todos os comentários
+@application.route('/consultar', methods=['GET'])
+def consultar():
+    return jsonify(comentarios), 200
+
+#Declarando valores que serão utilizados para subir a aplicação em container
+if __name__ == "__main__":
+    ENVIRONMENT_DEBUG = os.environ.get("APP_DEBUG", True)
+    ENVIRONMENT_PORT = os.environ.get("APP_PORT", 5000)
+    application.run(host='0.0.0.0', port=ENVIRONMENT_PORT, debug=ENVIRONMENT_DEBUG)
