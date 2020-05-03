@@ -19,7 +19,7 @@ WORKDIR $HOME
 COPY . $HOME
 
 #Atualizando o pip, instalando as dependências do arquivo requirements.txt, instalando Python WSGI HTTP Server gunicorn e definindo permissões de usuário e grupo de usuário
-RUN pip install --upgrade pip && \
+RUN pip install --upgrade pip==20.1 && \
 pip install -r requirements.txt && \
 pip install gunicorn==20.0.4 && \
 addgroup -g $GROUP_ID $USER_GROUP && \
