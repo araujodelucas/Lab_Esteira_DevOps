@@ -1,4 +1,4 @@
-from app import application
+from api_comentarios import application
 
 if __name__ == "__main__":
     #Habilita o modo debug
