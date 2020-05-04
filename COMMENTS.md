@@ -6,7 +6,8 @@
 # Subindo a Stack DevOps
 
 - Dentro do repositório na máquina local, execute o seguinte comando: docker-compose -f api/docker-compose.yml up -d
-Configurando o job no Jenkins:
+
+# Configurando o job no Jenkins:
 
 - No servidor do Jenkins, vamos criar um par de chaves para autenticar o Jenkins no GitHub, onde a chave privada deve ficar no servidor do Jenkins, e a chave pública deve ser setada no console do Github.
 - Dentro da opção de Credentials, vamos criar as nossas credenciais para que o Jenkins se autentique no Github (via ssh com chave provada) e no Dockerhub (através de usuário e senha).
