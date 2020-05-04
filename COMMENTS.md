@@ -6,7 +6,7 @@
 . Git: Para fazer o pull do repositório remoto no Github, e trabalhar localmente
 
 - Subindo a Stack DevOps
-1- Dentro do repositório na máquina local, execute o seguinte comando: docker-compose -f api/docker-compose.yml up -d
+1 - Dentro do repositório na máquina local, execute o seguinte comando: docker-compose -f api/docker-compose.yml up -d
 
 - Configurando o job no Jenkins: 
 1- No servidor do Jenkins, vamos criar um par de chaves para autenticar o Jenkins no GitHub, onde a chave privada deve ficar no servidor do Jenkins, e a chave pública deve ser setada no console do Github.
