@@ -27,7 +27,7 @@ services:
             
     prometheus: #Serviço para centralizar o monitoramento
         container_name: prometheus #Nome do container
-        image: prometheus:alpine #Nome da imagem
+        image: prom/prometheus #Nome da imagem
         restart: unless-stopped #Container para/reinicia, se o daemon do docker for parado/reiniciado
         #Mapeando as portas da máquina local com o container
         ports:
@@ -41,7 +41,7 @@ services:
         
     grafana: #Serviço para exiber o dashboard das métricas do container e requisições da API, coletadas pelo o Prometheus (Client Library Python e CAdvisor)
         container_name: grafana # Nome do container
-        image: grafana:alpine #Nome da imagem
+        image: grafana/grafana #Nome da imagem
         restart: unless-stopped #Container para/reinicia, se o daemon do docker for parado/reiniciado
         #Mapeando as portas da máquina local com o container
         ports: 
