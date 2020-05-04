@@ -1,33 +1,22 @@
-OBSERVAÇÕES:
-- Enquanto o ambiente da API não está containerizado, recomendo utilizar o sistema operacional Ubuntu 18.04, através de uma VM no Virtual BOX com o Vagrant, um container com essa distro, ou caso seja o caso, na sua própria máquina.
-- Caso o SO não tenha o git instalado, execute o seguinte comando, dentro do SO do Ubuntu: sudo apt-get install git-all
+#Case DevOps Globo.com
+- O planejamento inicial era utilizar o Vagrant para gerenciar uma VM Linux Ubuntu 18.04, executando em um Hypervisor Oracle VirtualBox, onde através do Vagrantfile, estaria setado os parâmetros para fazer a camada de provisionamento e gerenciamento de configuração do ambiente com o Puppet / Ansible e Shell Script. Porém, aconteceram alguns imprevistos e não consegui terminar a tempo.
+- Nesse provisionamento, seria automatizado a instalação e e configuração do:
+. Docker-CE: Para o Jenkins conectar no daemon do Docker Host e consiga fazer o build da imagem da API
+. Docker-Compose: Para subir as ferramentas dessa stack DevOps
+. Git: Para fazer o pull do repositório remoto no Github, e trabalhar localmente
 
-1 - Instalar o pip com o python3: sudo apt install python3-venv python3-pip
-Referência: https://packaging.python.org/guides/installing-using-linux-tools/#installing-pip-setuptools-wheel-with-linux-package-managers
+- Subindo a Stack DevOps
+1- Dentro do repositório na máquina local, execute o seguinte comando: docker-compose -f api/docker-compose.yml up -d
 
-2 - Instalar o virtualenv: pip3 install virtualenv
-
-3 - Criar o diretório api e entrar nele: mkdir api && cd api
-
-4 - Criar o virtualenv: virtualenv .venv
-
-5 - Ativar o virtualenv: source .test/bin/activate
-OBS: Caso queria sair do virtualenv, execute o seguinte comando: deactivate
-
-6 - Instalar o Flask: pip3 install flask
-
-7 - Instalar o jsonify: pip3 install jsonify
-
-8 - Instalar o request: pip3 install request
-
-9 - Criar arquivo para instalar as dependências do Flask: touch requirements.txt
-
-10 - Escolher o editor de texto de sua preferência e inserir o seguinte conteúdo dentro do arquivo requirements.txt: flask==x.x.x
-Exemplo: flask==1.1.2
-OBS: A versão do flask pode ser analisada no output do comando de instalação pip install flask
-
-11 - Inserir um novo comentário: curl -X POST -H 'Content-Type: application/json' -d '{"comentario":"COMENTARIO","usuario":"USUARIO_QUE_COMENTOU"}' localhost:5000/comentar
-Exemplo: curl -X POST -H 'Content-Type: application/json' -d '{"comentario":"Reportagem show de bola","usuario":"Lucas"}' http://127.0.0.1:5000/comentar
-
-12 - Executar o seguinte comando no bash, para consultar os comentários: curl -X GET http://127.0.0.1:5000/consultar.
-OBS: Como o GET e o http é o método e protocólo padrão, respectivamente, também podemos consultar os comentários da seguinte maneira: curl 127.0.0.1:5000/consultar. Caso o comando curl não esteja instalado, execute o seguinte comando para instalá-lo: apt install curl -y
+- Configurando o job no Jenkins: 
+1- No servidor do Jenkins, vamos criar um par de chaves para autenticar o Jenkins no GitHub, onde a chave privada deve ficar no servidor do Jenkins, e a chave pública deve ser setada no console do Github.
+2- Dentro da opção de Credentials, vamos criar as nossas credenciais para que o Jenkins se autentique no Github (via ssh com chave provada) e no Dockerhub (através de usuário e senha).  
+3- Em Manage Jenkins > Manage Plugins > Available > Na barra de pesquisa, digite docker > Selecione o checkbox do plugin Docker Plugin e clique no botão para instalar e reiniciar o Jenkins após a instalação
+4- Clique em New Item para criar um job com o nome de api e o projeto do tipo Freestyle > Clique em OK
+5- Na aba Source Code Management, selecone Git > Em Repositories, insira a URL git@github.com:SelecaoGlobocom/lucas-de-araujo.git > Em Credentials, selecione a credencial que configuramos para autenticar no Github > Mantenha a branch como master
+6- Na aba Build Triggers, selecione Poll SCM e informe qual a periodicidade que o job irá verificar uma nova modificação no repositório do Github. No nosso caso, informe o seguinte valor para verificar a cada minuto: * * * * * 
+7- Na aba Build Environment, selecione Delete workspace before build starts, para evitar "sujeiras" ao fazer o build
+8- Na aba Build, selecione Execute Shell e informe o seguinte valor para fazer o lint do nosso Dockerfile que gera a imagem da API: docker run --rm -i hadolint/hadolint < ./api/Dockerfile
+9- Na mesma aba, selecione Build / Publish Docker Image > Informe no Directory for Dockerfile, o valor ./api > Cloud, docker > Image, lucasdearaujo1/api_comentarios:v1 > Marque o checkbox Push Image > Selecione a credencial que definimos para autenticar no Dockerhub > Clique em Apply e Save
+10- Realize o Build da imagem e publique no Dockerhub, clicando em Build Now
+11- Em Build History, você pode acompoanhar o output da execução do build. Caso tenha sido feito com sucesso, a seguinte mensagem será exibida no final do console de output, Finished: SUCCESS
