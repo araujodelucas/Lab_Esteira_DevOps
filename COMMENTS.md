@@ -7,9 +7,9 @@ Referência: https://packaging.python.org/guides/installing-using-linux-tools/#i
 
 2 - Instalar o virtualenv: pip3 install virtualenv
 
-3 - Criar o diretório api e entrar nele: mkdir api && cd api
+3 - Criar o diretório api e entrar nele: mkdir /home/api && cd /home/api
 
-4 - Criar o virtualenv: virtualenv .venv
+4 - Criar o virtualenv: virtualenv .test
 
 5 - Ativar o virtualenv: source .test/bin/activate
 OBS: Caso queria sair do virtualenv, execute o seguinte comando: deactivate

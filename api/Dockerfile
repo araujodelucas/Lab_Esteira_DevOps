@@ -1,4 +1,5 @@
 #Fazendo o pull da imagem base
+#FROM python:3.6.8-alpine3.9 AS multistage
 FROM python:3.6.8-alpine3.9
 
 #Responsável por manter a imagem
@@ -24,6 +25,14 @@ pip install -r requirements.txt && \
 pip install gunicorn==20.0.4 && \
 addgroup -g $GROUP_ID $USER_GROUP && \
 adduser -D -u $USER_ID -G $USER_GROUP $USER -s /bin/sh
+
+#Técnica para reduzir o tamanho da imagem
+#FROM alpine:3.9
+#ENV HOME=/home
+#WORKDIR $HOME
+#RUN pip install gunicorn==20.0.4
+#COPY --from=multistage /var/www/api_comentarios.py $HOME
+#COPY --from=multistage /var/www/wsgi.py $HOME
 
 #Usuário que executará a aplicação
 USER $USER
