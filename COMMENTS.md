@@ -9,6 +9,8 @@
 
 # Configurando o job no Jenkins:
 
+
+
 - No servidor do Jenkins, vamos criar um par de chaves para autenticar o Jenkins no GitHub, onde a chave privada deve ficar no servidor do Jenkins, e a chave pública deve ser setada no console do Github.
 - Dentro da opção de Credentials, vamos criar as nossas credenciais para que o Jenkins se autentique no Github (via ssh com chave provada) e no Dockerhub (através de usuário e senha).
 - Em Manage Jenkins > Manage Plugins > Available > Na barra de pesquisa, digite docker > Selecione o checkbox do plugin Docker Plugin e clique no botão para instalar e reiniciar o Jenkins após a instalação
